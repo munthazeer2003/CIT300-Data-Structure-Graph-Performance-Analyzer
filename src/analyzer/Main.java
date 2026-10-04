@@ -1,12 +1,20 @@
 package analyzer;
 
-import java.util.Scanner;
+import analyzer.array.ArrayMenu;
+import analyzer.graph.GraphMenu;
+import analyzer.performance.PerformanceComparison;
+import analyzer.performance.ResultStore;
+import analyzer.search.SearchMenu;
+import analyzer.util.InputHelper;
 
+/** Entry point: main menu that integrates every module. */
 public class Main {
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int choice = 0;
+        ArrayMenu arrayMenu = new ArrayMenu();
+        SearchMenu searchMenu = new SearchMenu(arrayMenu);
+        GraphMenu graphMenu = new GraphMenu();
+        int choice;
 
         do {
             System.out.println("=============================================");
@@ -21,23 +29,17 @@ public class Main {
             System.out.println("7. Performance Comparison");
             System.out.println("8. Display All Results");
             System.out.println("9. Exit");
-            System.out.print("Enter your choice: ");
-
-            if (!scanner.hasNextInt()) {
-                System.out.println("Invalid input. Please enter a number between 1 and 9.");
-                scanner.next();
-                continue;
-            }
-            choice = scanner.nextInt();
+            choice = InputHelper.readInt("Enter your choice: ", 1, 9);
 
             switch (choice) {
-                case 1, 2, 3, 4, 5, 6, 7, 8 ->
-                    System.out.println("This module is not integrated yet.");
+                case 1 -> arrayMenu.run();
+                case 2, 3, 4 -> System.out.println("This module is not integrated yet.");
+                case 5 -> searchMenu.run();
+                case 6 -> graphMenu.run();
+                case 7 -> PerformanceComparison.compareTraversals(graphMenu.getGraph());
+                case 8 -> ResultStore.displayAll();
                 case 9 -> System.out.println("Exiting program. Goodbye!");
-                default -> System.out.println("Invalid choice. Please enter 1-9.");
             }
         } while (choice != 9);
-
-        scanner.close();
     }
 }
