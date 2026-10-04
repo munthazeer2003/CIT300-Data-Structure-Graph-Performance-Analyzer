@@ -1,5 +1,6 @@
 package analyzer.graph;
 
+import analyzer.performance.ResultStore;
 import analyzer.util.InputHelper;
 
 /** Console submenu for graph operations. */
@@ -70,5 +71,10 @@ public class GraphMenu {
         }
         TraversalResult result = useBfs ? graph.bfs(start) : graph.dfs(start);
         System.out.println(result);
+
+        // Record the result so it appears in Performance Comparison and Display All Results
+        ResultStore.add("Graph Traversal", result.getAlgorithm(),
+                result.getSteps(), result.getTimeNanos(),
+                String.join(" -> ", result.getOrder()));
     }
 }
