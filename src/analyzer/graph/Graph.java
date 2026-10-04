@@ -1,9 +1,13 @@
 package analyzer.graph;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 
 /**
  * Undirected graph represented using an adjacency list.
@@ -74,5 +78,36 @@ public class Graph {
         for (Map.Entry<String, List<String>> entry : adjacencyList.entrySet()) {
             System.out.println("  " + entry.getKey() + " -> " + entry.getValue());
         }
+    }
+
+    /** Breadth-First Search using a queue. */
+    public TraversalResult bfs(String start) {
+        if (!hasVertex(start)) {
+            throw new IllegalArgumentException("Vertex not found: " + start);
+        }
+        start = start.trim();
+
+        long begin = System.nanoTime();
+        int steps = 0;
+        List<String> order = new ArrayList<>();
+        Set<String> visited = new HashSet<>();
+        Queue<String> queue = new LinkedList<>();
+
+        visited.add(start);
+        queue.add(start);
+
+        while (!queue.isEmpty()) {
+            String current = queue.poll();
+            order.add(current);
+            steps++;                       // one step per vertex visited
+            for (String neighbour : adjacencyList.get(current)) {
+                steps++;                   // one step per neighbour checked
+                if (visited.add(neighbour)) {
+                    queue.add(neighbour);
+                }
+            }
+        }
+        long time = System.nanoTime() - begin;
+        return new TraversalResult("BFS", order, steps, time);
     }
 }
