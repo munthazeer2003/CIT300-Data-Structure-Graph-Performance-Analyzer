@@ -1,6 +1,8 @@
 package analyzer.graph;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -110,4 +112,38 @@ public class Graph {
         long time = System.nanoTime() - begin;
         return new TraversalResult("BFS", order, steps, time);
     }
-}
+    /** Depth-First Search using a stack. */
+    public TraversalResult dfs(String start) {
+        if (!hasVertex(start)) {
+            throw new IllegalArgumentException("Vertex not found: " + start);
+        }
+        start = start.trim();
+
+        long begin = System.nanoTime();
+        int steps = 0;
+        List<String> order = new ArrayList<>();
+        Set<String> visited = new HashSet<>();
+        Deque<String> stack = new ArrayDeque<>();
+
+        stack.push(start);
+
+        while (!stack.isEmpty()) {
+            String current = stack.pop();
+            if (visited.contains(current)) {
+                continue;
+            }
+            visited.add(current);
+            order.add(current);
+            steps++;                       // one step per vertex visited
+            List<String> neighbours = adjacencyList.get(current);
+            // push in reverse so neighbours are visited in insertion order
+            for (int i = neighbours.size() - 1; i >= 0; i--) {
+                steps++;                   // one step per neighbour checked
+                if (!visited.contains(neighbours.get(i))) {
+                    stack.push(neighbours.get(i));
+                }
+            }
+        }
+        long time = System.nanoTime() - begin;
+        return new TraversalResult("DFS", order, steps, time);
+    }}
