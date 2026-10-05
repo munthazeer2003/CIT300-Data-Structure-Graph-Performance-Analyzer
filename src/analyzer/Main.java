@@ -2,9 +2,12 @@ package analyzer;
 
 import analyzer.array.ArrayMenu;
 import analyzer.graph.GraphMenu;
+import analyzer.linkedlist.LinkedListMenu;
 import analyzer.performance.PerformanceComparison;
 import analyzer.performance.ResultStore;
+import analyzer.queue.QueueMenu;
 import analyzer.search.SearchMenu;
+import analyzer.stack.StackMenu;
 import analyzer.util.InputHelper;
 
 /** Entry point: main menu that integrates every module. */
@@ -12,6 +15,9 @@ public class Main {
 
     public static void main(String[] args) {
         ArrayMenu arrayMenu = new ArrayMenu();
+        StackMenu stackMenu = new StackMenu();
+        QueueMenu queueMenu = new QueueMenu();
+        LinkedListMenu linkedListMenu = new LinkedListMenu();
         SearchMenu searchMenu = new SearchMenu(arrayMenu);
         GraphMenu graphMenu = new GraphMenu();
         int choice;
@@ -33,7 +39,9 @@ public class Main {
 
             switch (choice) {
                 case 1 -> arrayMenu.run();
-                case 2, 3, 4 -> System.out.println("This module is not integrated yet.");
+                case 2 -> stackMenu.run();
+                case 3 -> queueMenu.run();
+                case 4 -> linkedListMenu.run();
                 case 5 -> searchMenu.run();
                 case 6 -> graphMenu.run();
                 case 7 -> PerformanceComparison.compareTraversals(graphMenu.getGraph());
